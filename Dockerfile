@@ -1,5 +1,7 @@
 FROM python:2.7-slim
 
+MAINTAINER <Aashrey Sharma> aashreysh@gmail.com
+
 ENV RASA_NLU_DOCKER="YES" \
     RASA_NLU_HOME=/app \
     RASA_NLU_PYTHON_PACKAGES=/usr/local/lib/python2.7/dist-packages
@@ -22,11 +24,11 @@ COPY ./requirements.txt requirements.txt
 # Split into pre-requirements, so as to allow for Docker build caching
 RUN pip install $(tail -n +2 requirements.txt)
 
+RUN python -m spacy download en
+
 COPY . ${RASA_NLU_HOME}
 
 RUN python setup.py install
-
-RUN ls /app
 
 EXPOSE 5000
 
